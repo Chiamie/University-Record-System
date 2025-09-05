@@ -1,4 +1,4 @@
-def getStudentRecord(student_list):
+def get_student_record(student_list):
 	student_details = {}
 	student_details['Name'] = student_list[0]
 	student_details['Age'] = student_list[1]
@@ -6,14 +6,14 @@ def getStudentRecord(student_list):
 	student_details['Courses'] = student_list[3]
 	return student_details
 
-def getAllStudentsRecords(username, student_details, department):
+def get_all_students_records(username, student_details, department):
 	department[username] = student_details
 	return department
 
-def displayStudentRecord(department, username):
+def display_student_record(department, username):
 	return department[useranme]
 	
-def displayCoursesOfStudent(department, username):
+def display_courses_of_student(department, username):
 	for student in department:
 		if student == username:
 			for details, data in student.items():
@@ -21,7 +21,7 @@ def displayCoursesOfStudent(department, username):
 					return student[details]
 
 
-def getZipCodeOfStudentAddress(department, username):
+def get_zip_code_of_student_address(department, username):
 	for student in department:
 		if student == username:
 			student_address = department[student]['Address']
@@ -29,6 +29,13 @@ def getZipCodeOfStudentAddress(department, username):
 			zip_code = student_address_list[-1]
 	return zip_code
 	
+def get_city_of_student_address(department, username):
+	for student in department:
+		if student == username:
+			student_address = department[student]['Address']
+			student_address_list = student_address.split("/")
+			student_city = student_address_list[2]
+	return student_city
 
 
 
@@ -37,10 +44,13 @@ def getZipCodeOfStudentAddress(department, username):
 department = {} 
 #student_details = {}
 student_list = []
-courses = set()
+
 	
 {'Anna': {'Name': 'Chiamaka', 'Age': '12', 'Address': 'tyu 87 gh', 'Courses': ['physics']}}
-while True:
+
+user_input = 'yes'
+while user_input != "-1":
+	courses = set()
 	student_name = input("Enter Student's name: ")
 	while student_name.isalpha() == False:
 		print("Invalid Name. Please ", end= "")
@@ -63,9 +73,9 @@ while True:
 	while student_courses.isalpha() == False:
 		print("Invalid course name. Please ", end= "")
 		student_courses = input("Enter courses offered by the student: ")
+		courses.add(student_courses)
 
-
-	student_address = input("Enter Student's address(house_number/strt_name_/city/state/zip_code): ")
+	student_address = input("Enter Student's address(house_number/strt_name/city/state/zip_code): ")
 	
 	student_list.insert(0, student_name)
 	student_list.insert(1, student_age)
@@ -74,13 +84,16 @@ while True:
 
 	student_username = input("Create a unique username: ")
 	print(student_list)
-	student_details = getStudentRecord(student_list)
+	student_details = get_student_record(student_list)
 	print(student_details)
 
-	print(getAllStudentsRecords(student_username, student_details, department))
+	print(get_all_students_records(student_username, student_details, department))
 
+	user_input = input("Do you want to perform another one: ")
 	
-	print(getZipCodeOfStudentAddress(department, 'Annabeauty'))
+print(get_zip_code_of_student_address(department, 'Annabeauty'))
+	
+print(get_city_of_student_address(department, 'Annabeauty'))
 
 
 
