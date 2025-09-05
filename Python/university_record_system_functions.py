@@ -36,7 +36,7 @@ def display_student_subjects_menu():
 	student_subjects__menu = """
 			1. Subjects offered by Student
 			2. Add Subject
-			3. REmove Subject
+			3. Remove Subject
 			"""
 	print(student_subjects__menu)
 

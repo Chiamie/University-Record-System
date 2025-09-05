@@ -2,7 +2,7 @@ import university_record_system_functions
 
 
 department_courses = ["Math", "Physics", "Computer Science", "Biology", "Chemistry", "Statistics", "English", "Economics", "History", "Philosophy", "Sociology",
-"Political Science", "Art", "Music", "Engineering", "Law", "Medicine", "Business", "Psychology"]
+"Political Science", "Art", "Music", "Engineering", "Law", "Medicine", "Business", "Psychology", "Geography"]
 department = {} 
 student_list = []
 
@@ -81,10 +81,37 @@ while department_portal:
 						
 				case 3:
 					print(university_record_system_functions.display_update_student_profile_menu())
+				case 4:
+					university_record_system_functions.display_student_subjects_menu()
+					student_subjects_menu_selection = int(input("Select an option: "))
+					match(student_subjects_menu_selection):
+						case 1:
+							student_username = input("Enter your username: ")
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+						case 2:
+							student_username = input("Enter your username: ")
+							course = input("Enter course name: ")
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+							is_valid = university_record_system_functions.add_new_course(department_courses, student_course, course)
+							if is_valid == "valid":
+								courses.add(course)
+								university_record_system_functions.displaySaveIcon()
+						case 3:
+							student_username = input("Enter your username: ")
+							course = input("Enter course name you dont want to offer again: ")
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+							print(university_record_system_functions.remove_course_and_update(department, username, student_courses, course))
+
 
 							
 
-
+		case 2:
+			print("The following are the subjects we offer in this department:")
+			number = 1
+			for subject in department_courses:
+				print(f"{number}. {subject}")
+				number += 1
+			
 			
 
 							
