@@ -46,7 +46,7 @@ def add_new_course(department_courses, student_courses, course):
 			return f"{course} is not offered in this department"
 	return "You are already offering this course"
 
-def remove_course(department, username, student_courses, course):		
+def remove_course_and_update(department, username, student_courses, course):		
 	for student in department:
 		if student == username:
 			for key in department[student]:
@@ -57,6 +57,13 @@ def remove_course(department, username, student_courses, course):
 							break
 	return department
 
+def get_number_of_students_in_department(department):
+	count = 0
+	for student, details in department.items():
+		count += 1
+	return count
+	
+	
 
 def displaySaveIcon():
 	print(">>>>Saved Successfully<<<<<")
