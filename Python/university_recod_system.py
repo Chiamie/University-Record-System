@@ -13,13 +13,12 @@ def get_all_students_records(username, student_details, department):
 def display_student_record(department, username):
 	return department[useranme]
 	
-def display_courses_of_student(department, username):
+def get_courses_student_offer(department, username):
 	for student in department:
 		if student == username:
-			for details, data in student.items():
-				if details == 'courses':
-					return student[details]
-
+			student_courses = department[student]['Courses']		
+		
+	return student_courses
 
 def get_zip_code_of_student_address(department, username):
 	for student in department:
@@ -38,15 +37,37 @@ def get_city_of_student_address(department, username):
 	return student_city
 
 
+	
+def add_new_course(department_courses, student_courses, course):
+	if course not in student_courses:
+		if course in department_courses:
+			return "valid"
+		else:
+			return f"{course} is not offered in this department"
+	return "You are already offering this course"
+
+def remove_course(department, username, student_courses, course):		
+	for student in department:
+		if student == username:
+			for key in department[student]:
+				if key == 'Courses':
+					for element in department[student][key]:
+						if element == course:
+							department[student][key].remove(element)
+							break
+	return department
+
+
+def displaySaveIcon():
+	print(">>>>Saved Successfully<<<<<")
 
 
 
+department_courses = ["Math", "Physics", "Computer Science", "Biology", "Chemistry", "Statistics", "English", "Economics", "History", "Philosophy", "Sociology",
+"Political Science", "Art", "Music", "Engineering", "Law", "Medicine", "Business", "Psychology"]
 department = {} 
 #student_details = {}
 student_list = []
-
-	
-{'Anna': {'Name': 'Chiamaka', 'Age': '12', 'Address': 'tyu 87 gh', 'Courses': ['physics']}}
 
 user_input = 'yes'
 while user_input != "-1":
@@ -59,21 +80,23 @@ while user_input != "-1":
 	student_age = input("Enter Student's age: ")
 	while student_age.isdigit() == False:
 		print("Invalid age. Please ", end= "")
-		student_age = int(input("Enter Student's age: "))
+		student_age = input("Enter Student's age: ")
 
-	student_courses = input("Enter courses offered by the student: ")
-	courses.add(student_courses)
+	student_course = input("Enter course offered by the student: ")
+	student_course = student_course.charAt(0).lower()
+	courses.add(student_course)
 	user_response = input("Do you want to enter another course(yes/no): ")
 	user_response = user_response.lower()
 	while user_response != "no":
-		student_courses = input("Enter courses offered by the student: ")
-		courses.add(student_courses)
+		student_course = input("Enter course offered by the student: ")
+		student_course = student_course.charAt(0).lower()
+		courses.add(student_course)
 		user_response = input("Do you want to enter another course(yes/no): ")
 
-	while student_courses.isalpha() == False:
+	while student_course.isalpha() == False:
 		print("Invalid course name. Please ", end= "")
-		student_courses = input("Enter courses offered by the student: ")
-		courses.add(student_courses)
+		student_course = input("Enter course offered by the student: ")
+		courses.add(student_course)
 
 	student_address = input("Enter Student's address(house_number/strt_name/city/state/zip_code): ")
 	
@@ -96,6 +119,10 @@ print(get_zip_code_of_student_address(department, 'Annabeauty'))
 print(get_city_of_student_address(department, 'Annabeauty'))
 
 
+student_courses = get_courses_student_offer(department, 'Annabeauty')
+
+
+print(add_new_course(department_courses, student_course, courses))
 
 
 
@@ -105,3 +132,6 @@ print(get_city_of_student_address(department, 'Annabeauty'))
 
 
 
+
+
+	
