@@ -1,7 +1,7 @@
 def display_main_menu():
 	menu = """
 	1. Student
-	2. Department Subjects
+	2. Department Info
 	"""
 	print(menu)
 
@@ -39,6 +39,14 @@ def display_student_subjects_menu():
 			3. Remove Subject
 			"""
 	print(student_subjects__menu)
+
+
+def display_department_info_menu():
+	department_info_menu = """
+		1. Department Subjects
+		2. Number of Students in Department
+		"""
+	print(department_info_menu)
 
 def get_student_record(student_list):
 	student_details = {}

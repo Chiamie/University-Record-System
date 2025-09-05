@@ -106,12 +106,17 @@ while department_portal:
 							
 
 		case 2:
-			print("The following are the subjects we offer in this department:")
-			number = 1
-			for subject in department_courses:
-				print(f"{number}. {subject}")
-				number += 1
-			
+			university_record_system_functions.display_department_info_menu()
+			department_info_menu_selection = int(input("Select an option: "))
+			match(department_info_menu_selection):
+				case 1:
+					print("The following are the subjects we offer in this department:")
+					number = 1
+					for subject in department_courses:
+						print(f"{number}. {subject}")
+						number += 1
+				case 2:
+					print(f"The number of students in this department is {university_record_system_functions.get_number_of_students_in_department(department)}")
 			
 
 							
