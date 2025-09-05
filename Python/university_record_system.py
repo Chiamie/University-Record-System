@@ -54,15 +54,15 @@ while department_portal:
 					student_list.insert(2, student_address)
 					student_list.insert(3, courses)
 
-					student_username = input("Create a unique username: ")
+					student_user_name = input("Create a unique username: ")
 					print(student_list)
 			
 					student_details = university_record_system_functions.get_student_record(student_list)
 					print(student_details)
 
-					department = university_record_system_functions.get_all_students_records(student_username, student_details, department)
+					department = university_record_system_functions.get_all_students_records(student_user_name, student_details, department)
 
-					
+					university_record_system_functions.displaySaveIcon()
 
 				
 				case 2:
@@ -70,36 +70,71 @@ while department_portal:
 					student_profile_menu_selection = int(input("Select an option: "))
 					match(student_profile_menu_selection):
 						case 1:
-							student_username = input("Enter your username: ")
-							print(university_record_system_functions.display_student_record(department, student_username))
+							student_user_name = input("Enter your username: ")
+							student_data = university_record_system_functions.display_student_record(department, student_user_name)
+							for key, data in student_data.items():
+								print(f"{key}: {data}")
+								
 						case 2:
-							student_username = input("Enter your username: ")
-							print(university_record_system_functions.get_city_of_student_address(department, student_username))
+							student_user_name = input("Enter your username: ")
+							print(university_record_system_functions.get_city_of_student_address(department, student_user_name))
 						case 3:
-							student_username = input("Enter your username: ")
-							print(university_record_system_functions.get_zip_code_of_student_address(department, student_username))
+							student_user_name = input("Enter your username: ")
+							print(university_record_system_functions.get_zip_code_of_student_address(department, student_user_name))
 						
 				case 3:
 					print(university_record_system_functions.display_update_student_profile_menu())
+					update_student_profile_menu_selection = int(input("Select an option: "))
+					match(update_student_profile_menu_selection):
+						case 1:
+							student_user_name = input("Enter your username: ")
+							user_input = input("Enter the new name: ")
+							updated_name = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Name')
+							response = university_record_system_functions.displayUpdatedIcon()
+							response = response.lower()
+							if response == "yes":
+								for key, data in updated_name.items():
+									print(f"{key}: {data}")
+
+						case 2:
+							student_user_name = input("Enter your username: ")
+							user_input = input("Enter the new age: ")
+							updated_age = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Age')
+							response = university_record_system_functions.displayUpdatedIcon()
+							response = response.lower()
+							if response == "yes":
+								for key, data in updated_age.items():
+									print(f"{key}: {data}")
+
+						case 3:
+							student_user_name = input("Enter your username: ")
+							user_input = input("Enter the new city: ")
+							print(university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address'))
+						case 4:
+							student_user_name = input("Enter your username: ")
+							user_input = input("Enter the new zip code: ")
+							print(university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address'))
+							
+					
 				case 4:
 					university_record_system_functions.display_student_subjects_menu()
 					student_subjects_menu_selection = int(input("Select an option: "))
 					match(student_subjects_menu_selection):
 						case 1:
-							student_username = input("Enter your username: ")
-							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+							student_user_name = input("Enter your username: ")
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
 						case 2:
-							student_username = input("Enter your username: ")
+							student_user_name = input("Enter your username: ")
 							course = input("Enter course name: ")
-							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
 							is_valid = university_record_system_functions.add_new_course(department_courses, student_course, course)
 							if is_valid == "valid":
 								courses.add(course)
 								university_record_system_functions.displaySaveIcon()
 						case 3:
-							student_username = input("Enter your username: ")
+							student_user_name = input("Enter your username: ")
 							course = input("Enter course name you dont want to offer again: ")
-							student_courses = university_record_system_functions.get_courses_student_offer(department, student_username)
+							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
 							print(university_record_system_functions.remove_course_and_update(department, username, student_courses, course))
 
 
@@ -117,6 +152,11 @@ while department_portal:
 						number += 1
 				case 2:
 					print(f"The number of students in this department is {university_record_system_functions.get_number_of_students_in_department(department)}")
+				case 3:
+					print(f'{"STUDENT":<12}DETAILS')
+					for student, details in department.items():
+						print(f"{student:<12}{details}")
+					
 			
 
 							
