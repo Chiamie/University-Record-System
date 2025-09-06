@@ -1,4 +1,4 @@
-
+const prompt = require('prompt-sync')();
 
 function displayMainMenu(){
 	const menu = `
@@ -97,5 +97,124 @@ function getCityOfStudentAddress(department, username){
 	return studentCity;
 }
 
+function isAlpha(string){
+	const format = /[a-zA-Z]/;
+	for(let char of string){
+		if(!format.test(char)){
+			return false;
+		}
+	}
+	return true;
+}
 	
+function isDigit(string){
+	const format = /[0-9]/;
+	for(let char of string){
+		if(!format.test(char)){
+			return false;
+		}
+	}
+	return true;
+}
 
+function capitalize(string){
+	stringArray = string.split("");
+	firstCharacter = stringArray.shift();
+	stringArray.unshift(firstCharacter.toUpperCase());
+	string  = stringArray.join("");
+	
+	return string;
+}
+
+function checkValidityToAddNewCourse(departmentCourses, studentCourses, course){
+	if (!studentCourses.includes(course)){
+		if (departmentCourses.includes(course))
+			return "valid";
+		else
+			return `${course} is not offered in this department`;
+	}
+	return "You are already offering this course"
+}
+function removeCourseAndUpdate(department, username, course){
+	for (let student in department){
+		if (student == username){
+			for (let key in department[student]){
+				if (key == "Courses"){
+					for (let element in department[student][key]){
+						if (department[student][key][element] = course){
+							elementIndex = department[student][key].indexOf(course);
+							department[student][key].splice(elementIndex, 1);
+						}
+					}
+				}
+			}
+		}
+	}
+	return department;
+}
+const departmentCourses = ["Math", "Physics", "Computer Science", "Biology", "Chemistry", "Statistics", "English", "Economics", "History", "Philosophy", "Sociology",
+"Political Science", "Art", "Music", "Engineering", "Law", "Medicine", "Business", "Psychology", "Geography"];
+let department = {};
+let student_list = [];
+
+let departmentPortal = true;
+while (departmentPortal){
+	displayMainMenu();
+	let mainMenuSelection = parseInt(prompt("Select an option: "));
+	switch(mainMenuSelection){
+		case 1:
+			displayStudentMenu();
+			let studentMenuSelection = parseInt(prompt("Select an option: "))
+			switch(studentMenuSelection){
+				case 1:
+					let courses = [];
+					let studentName = prompt("Enter Student's name: ");
+					while (isAlpha(studentName) == false) {
+						console.log("Invalid Name. Please ");
+						studentName = prompt("Enter Student's name: ");
+					}
+				case 2:
+					let studentAge = prompt("Enter Student's age: ");
+					while (isDigit(studentAge) == false){
+						console.log("Invalid age. Please " + "");
+						studentAge = prompt("Enter Student's age: ");
+					}
+
+					let studentCourse = prompt("Enter course offered by the student: ");
+					while (isAlpha(studentCourse) == false){
+						console.log("Invalid course name. Please ");
+						studentCourse = prompt("Enter course offered by the student: ");
+					}
+					studentCourse = capitalize(studentCourse);
+					let validity = checkValidityToAddNewCourse(departmentCourses, courses, studentCourse);
+					if (validity == "valid")
+						courses.push(studentCourse);
+					else
+						console.log(validity);
+						
+					let userResponse = prompt("Do you want to enter another course(yes/no): ");
+					userResponse = userResponse.toLowerCase();
+					while (userResponse != "no"){
+						studentCourse = prompt("Enter course offered by the student: ");
+						while (isAlpha(studentCourse) == false){
+							console.log("Invalid course name. Please ");
+							studentCourse = prompt("Enter course offered by the student: ");
+						}
+						studentCourse = capitalize(studentCourse);
+						validity = checkValidityToAddNewCourse(departmentCourses, courses, studentCourse);
+						if (validity == "valid")
+							courses.push(studentCourse)
+						else
+							console.log(validity)
+						userResponse = prompt("Do you want to enter another course(yes/no): ");
+						userResponse = userResponse.toLowerCase();
+					}
+
+
+	
+			}
+		case 0: 
+			departmentPortal = false;
+	}
+	
+}
