@@ -10,7 +10,7 @@ def display_main_menu():
 
 def display_student_menu():
 	student_menu = """
-			1. Add Student
+			1. Add New Student
 			2. View Student Profile
 			3. Update Student Profile
 			4. View Student Subjects
@@ -162,7 +162,12 @@ def check_pattern(user_input):
 	return bool(re.fullmatch(pattern, user_input))
 	
 	
-	
+def check_if_user_name_exits(user_name, department):
+	for student in department:
+		if user_name == student:
+			return "yes"
+	return "no"
+
 	
 	
 	
