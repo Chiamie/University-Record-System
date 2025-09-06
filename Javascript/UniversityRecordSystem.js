@@ -41,7 +41,7 @@ function displayStudentSubjectsMenu(){
 			2. Add Subject
 			3. Remove Subject
 			`
-	console,log(studentSubjectsMenu);
+	console.log(studentSubjectsMenu);
 }
 
 function displayDepartmentInfoMenu(){
@@ -76,22 +76,24 @@ function getCoursesStudentOffer(department, username){
 	return studentCourses;
 }
 function getZipCodeOfStudentAddress(department, username){
+	let zipCode;
 	for (let student in department){
 		if (student == username){
 			let studentAddress = department[student]['Address'];
 			let studentAddressList = studentAddress.split("/");
-			let zipCode = studentAddressList[-1];
+			zipCode = studentAddressList[4];
 		}
 	}
 	return zipCode;
 }
 	
 function getCityOfStudentAddress(department, username){
+	let studentCity;
 	for (let student in department){
 		if (student == username){
 			let studentAddress = department[student]['Address'];
 			let studentAddressList = studentAddress.split("/");
-			let studentCity = studentAddressList[2];
+			studentCity = studentAddressList[2];
 		}
 	}
 	return studentCity;
@@ -147,7 +149,7 @@ function removeCourseAndUpdate(department, username, course){
 			for (let key in department[student]){
 				if (key == "Courses"){
 					for (let element in department[student][key]){
-						if (department[student][key][element] = course){
+						if (department[student][key][element] == course){
 							elementIndex = department[student][key].indexOf(course);
 							department[student][key].splice(elementIndex, 1);
 						}
@@ -168,11 +170,57 @@ function displayUpdatedIcon(){
 	return userResponse;
 }
 
+function checkIfUserNameExits(userName, department){
+	for (let student in department){
+		if (userName == student)
+			return "yes";
+	}
+	return "no";
+}
 
+function modifyStudentProfile(department, userName, userInput, fieldToModify){
+	for (let student in department){
+		if (student == userName){
+			for (let key in department[student]){
+				if (key == fieldToModify){
+					if (key == 'Address' && isDigit(userInput) == true){
+						let address = department[student][key].split("/");
+						console.log(address);
+						address.pop();
+						console.log(address);
+						address.push(userInput);
+						console.log(address);
+						department[student][key] = address.join("/");
+						break;
+					}
+					else if (key == 'Address' && isAlpha(userInput) == true){
+						address = department[student][key].split("/");
+						console.log(address);
+						address.splice(2, 1);
+						console.log(address);
+						address.splice(2, 0, userInput);
+						console.log(address);
+						department[student][key] = address.join("/");
+						break;
+					}
+						
+					
+					department[student][key] = userInput;
+					break;
+				}
+			}
+		}
+	}
+	return department;
+}
 
-
-
-
+function getNumberOfStudentsInDepartment(department){
+	let count = 0;
+	for (let student in department){
+		count += 1;
+	}
+	return count;
+}
 
 
 
@@ -256,12 +304,221 @@ while (departmentPortal){
 
 					department = getAllStudentsRecords(studentUserName, studentDetails, department);
 
-					displaySaveIcon();
-
+					displaySaveIcon(); 
+					
+										
 	
+				case 2:
+					displayStudentProfileMenu();
+					studentProfileMenuSelection = parseInt(prompt("Select an option: "));
+					switch(studentProfileMenuSelection){
+						case 1:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department)
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+							else{
+								studentData = displayStudentRecord(department, studentUserName);
+								for (let key in studentData){
+									console.log(`Key: ${key}, Value: ${studentData[key]} `);
+								}
+							}
+							
+							
+								
+						case 2:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+
+							else
+								console.log(getCityOfStudentAddress(department, studentUserName));
+														
+						case 3:
+							studentUserName = prompt("Enter your username: ");							
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+							else
+								console.log(getZipCodeOfStudentAddress(department, studentUserName));
+							
+					}
+					
+					
+				case 3:
+					console.log(displayUpdateStudentProfileMenu());
+					updateStudentProfileMenuSelection = parseInt(prompt("Select an option: "));
+					switch(updateStudentProfileMenuSelection){
+						case 1:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+							else{
+								userInput = prompt("Enter the new name: ");
+								let updatedProfile = modifyStudentProfile(department, studentUserName, userInput, 'Name');
+								let response = displayUpdatedIcon();
+								response = response.toLowerCase();
+								if (response == "yes"){
+									for (let key in updatedProfile){
+										console.log(`${key} => `);
+										for(let key1 in updatedProfile[key]){
+											console.log(`${key1}: ${updatedProfile[key][key1]} `)
+										}
+									}
+								}
+							}
+							
+						case 2:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+							else{
+								userInput = prompt("Enter the new age: ");
+								updatedProfile = modifyStudentProfile(department, studentUserName, userInput,  'Age')
+								response = displayUpdatedIcon();
+								response = response.toLowerCase();
+								if (response == "yes"){
+									for (let key in updatedProfile){
+										console.log(`${key} => `);
+										for(let key1 in updatedProfile[key]){
+											console.log(`${key1}: ${updatedProfile[key][key1]} `);
+										}
+									}
+								}
+							}
+							
+						case 3:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+
+							else{
+								userInput = prompt("Enter the new city: ");
+								updatedProfile = modifyStudentProfile(department, studentUserName, userInput,  'Address')
+								response = displayUpdatedIcon();
+								response = response.toLowerCase();
+								if (response == "yes"){
+									for (let key in updatedProfile){
+										console.log(`${key} => `);
+										for(let key1 in updatedProfile[key]){
+											console.log(`${key1}: ${updatedProfile[key][key1]} `);
+										}
+									}
+								}
+								
+							}
+							
+							
+						case 4:
+							studentUserName = prompt("Enter your username: ");
+							validity = checkIfUserNameExits(studentUserName, department);
+							if (validity == "no")
+								console.log(`${studentUserName} not found`);
+
+							else{
+								userInput = prompt("Enter the new zip code: ");
+								updatedProfile = modifyStudentProfile(department, studentUserName, userInput,  'Address')
+								response = displayUpdatedIcon();
+								response = response.toLowerCase();
+								if (response == "yes"){
+									for (let key in updatedProfile){
+										console.log(`${key} => `);
+										for(let key1 in updatedProfile[key]){
+											console.log(`${key1}: ${updatedProfile[key][key1]} `);
+										}
+									}
+								}
+							}
+						}
+						
+					
+					case 4:
+						displayStudentSubjectsMenu();
+						let studentSubjectsMenuSelection = parseInt(prompt("Select an option: "));
+						switch(studentSubjectsMenuSelection){
+							case 1:
+								studentUserName = prompt("Enter your username: ");
+								validity = checkIfUserNameExits(studentUserName, department);
+								if (validity == "no")
+									console.log(`${studentUserName} not found`);
+								else{
+									let studentCourses = getCoursesStudentOffer(department, studentUserName);
+									for (let index = 0; index < studentCourses.length; index++){
+										console.log(studentCourses[index]);
+									}
+								}
+								
+
+							case 2:
+								studentUserName = prompt("Enter your username: ");
+								validity = checkIfUserNameExits(studentUserName, department);
+								if (validity == "no")
+									console.log(`${studentUserName} not found`);
+								else{
+									course = prompt("Enter course name: ");
+									course = capitalize(course);
+									studentCourses = getCoursesStudentOffer(department, studentUserName);
+									validity = checkValidityToAddNewCourse(departmentCourses, studentCourses, course);
+									if (validity == "valid"){
+										courses.push(course);
+										displaySaveIcon();
+									}else
+										console.log(validity);
+								}
+								
+							case 3:
+								studentUserName = prompt("Enter your username: ");
+								validity = checkIfUserNameExits(studentUserName, department);
+								if (validity == "no")
+									console.log(`${studentUserName} not found`);
+								else{
+									course = prompt("Enter course name: ");
+									course = capitalize(course);
+									studentCourses = getCoursesStudentOffer(department, studentUserName);
+									//removeCourseAndUpdate(department, username, course)
+									let updatedStudentCourses = removeCourseAndUpdate(department, studentUserName, course);
+									response = displayUpdatedIcon();
+									response = response.toLowerCase();
+									if (response == 'yes'){
+										for (let index = 0; index < studentCourses.length; index++){
+											console.log(studentCourses[index]);
+										}
+									}
+								}
+								
+							}
+							
+		case 2:
+			displayDepartmentInfoMenu();
+			departmentInfoMenuSelection = parseInt(prompt("Select an option: "));
+			switch(departmentInfoMenuSelection){
+				case 1:
+					console.log("The following are the subjects we offer in this department:");
+					let number = 1
+					for (let index = 0; index < departmentCourses; index++){
+						console.log(`${number}. ${departmentCourses[index]}`);
+						number++;
+					}
+				case 2:
+					console.log(`The number of students in this department is ${getNumberOfStudentsInDepartment(department)}`)
+				case 3:
+					consloe.log("STUDENT\tDETAILS");
+					for (let student in department){
+						console.log(`${student} =>`);
+						for (let key in department[student]){
+							console.log(`${key}; {department[student][key]}`);
+						}
+					}
 			}
+		}
 		case 0: 
 			departmentPortal = false;
-	}
 	
+	
+}
+
 }
