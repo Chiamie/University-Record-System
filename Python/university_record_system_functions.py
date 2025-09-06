@@ -1,7 +1,10 @@
+import re
+
 def display_main_menu():
 	menu = """
 	1. Student
 	2. Department Info
+	0. Exit
 	"""
 	print(menu)
 
@@ -17,7 +20,7 @@ def display_student_menu():
 
 def display_student_profile_menu():
 	student_profile__menu = """
-			1. View All Details
+			1. View Student Details
 			2. View City
 			3. View Zip Code
 			"""
@@ -45,6 +48,7 @@ def display_department_info_menu():
 	department_info_menu = """
 		1. Department Subjects
 		2. Number of Students in Department
+		3. View all Students with their Details
 		"""
 	print(department_info_menu)
 
@@ -88,7 +92,7 @@ def get_city_of_student_address(department, username):
 
 
 	
-def add_new_course(department_courses, student_courses, course):
+def check_validity_to_add_new_course(department_courses, student_courses, course):
 	if course not in student_courses:
 		if course in department_courses:
 			return "valid"
@@ -107,6 +111,36 @@ def remove_course_and_update(department, username, student_courses, course):
 							break
 	return department
 
+def modify_student_profile(department, user_name, user_input, field_to_modify):
+	for student in department:
+		if student == user_name:
+			for key in department[student]:
+				if key == field_to_modify:
+					if key == 'Address' and user_input.isdigit() == True:
+						address = department[student][key].split("/")
+						print(address)
+						address.pop(-1)
+						print(address)
+						address.append(user_input)
+						print(address)
+						department[student][key] = "/".join(address)
+						break
+					elif key == 'Address' and user_input.isalpha() == True:
+						address = department[student][key].split("/")
+						print(address)
+						address.pop(2)
+						print(address)
+						address.insert(2, user_input)
+						print(address)
+						department[student][key] = "/".join(address)
+						break
+
+						
+					
+					department[student][key] = user_input
+					break
+	return department
+
 def get_number_of_students_in_department(department):
 	count = 0
 	for student, details in department.items():
@@ -115,5 +149,22 @@ def get_number_of_students_in_department(department):
 	
 	
 
-def displaySaveIcon():
+def display_save_icon():
 	print(">>>>Saved Successfully<<<<<")
+	
+def display_updated_icon():
+	print(">>>>>Updated Successfully>>>>")
+	user_response = input("Do you want to view the updated profile: ")
+	return user_response
+
+def check_pattern(user_input):
+	pattern = r"\d+/[a-zA-Z]+Street/[a-zA-Z]+/[a-zA-Z]+/\d+"
+	return bool(re.fullmatch(pattern, user_input))
+	
+	
+	
+	
+	
+	
+	
+	

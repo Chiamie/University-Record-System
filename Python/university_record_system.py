@@ -3,7 +3,7 @@ import university_record_system_functions
 
 department_courses = ["Math", "Physics", "Computer Science", "Biology", "Chemistry", "Statistics", "English", "Economics", "History", "Philosophy", "Sociology",
 "Political Science", "Art", "Music", "Engineering", "Law", "Medicine", "Business", "Psychology", "Geography"]
-department = {} 
+department = {}
 student_list = []
 
 department_portal = True
@@ -27,13 +27,18 @@ while department_portal:
 						print("Invalid age. Please ", end= "")
 						student_age = input("Enter Student's age: ")
 
+
 					student_course = input("Enter course offered by the student: ")
 					while student_course.isalpha() == False:
 						print("Invalid course name. Please ", end= "")
 						student_course = input("Enter course offered by the student: ")
-
 					student_course = student_course.capitalize()
-					courses.add(student_course)
+					validity = university_record_system_functions.check_validity_to_add_new_course(department_courses, courses, student_course)
+					if validity == "valid":
+						courses.add(student_course)
+					else:
+						print(validity)
+						
 					user_response = input("Do you want to enter another course(yes/no): ")
 					user_response = user_response.lower()
 					while user_response != "no":
@@ -42,13 +47,25 @@ while department_portal:
 							print("Invalid course name. Please ", end= "")
 							student_course = input("Enter course offered by the student: ")
 						student_course = student_course.capitalize()
-						courses.add(student_course)
+						validity = university_record_system_functions.check_validity_to_add_new_course(department_courses, courses, student_course)
+						if validity == "valid":
+							courses.add(student_course)
+						else:
+							print(validity)
 						user_response = input("Do you want to enter another course(yes/no): ")
 						user_response = user_response.lower()
-
 					
-					student_address = input("Enter Student's address(house_number/strt_name/city/state/zip_code): ")
-	
+					student_address = input("Enter Student's address(house_number/street_name/city/state/zip_code): ")
+					validity = university_record_system_functions.check_pattern(student_address)
+					while validity == False:
+						print("Invalid address format. Follow the provided format. Ensure you put Street immediately after the street name.")
+						student_address = input("Enter Student's address(house_number/street_name/city/state/zip_code): ")
+						validity = university_record_system_functions.check_pattern(student_address)
+						
+					
+						
+					
+					university_record_system_functions.display_save_icon()
 					student_list.insert(0, student_name)
 					student_list.insert(1, student_age)
 					student_list.insert(2, student_address)
@@ -62,7 +79,7 @@ while department_portal:
 
 					department = university_record_system_functions.get_all_students_records(student_user_name, student_details, department)
 
-					university_record_system_functions.displaySaveIcon()
+					university_record_system_functions.display_save_icon()
 
 				
 				case 2:
@@ -90,7 +107,7 @@ while department_portal:
 							student_user_name = input("Enter your username: ")
 							user_input = input("Enter the new name: ")
 							updated_name = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Name')
-							response = university_record_system_functions.displayUpdatedIcon()
+							response = university_record_system_functions.display_updated_icon()
 							response = response.lower()
 							if response == "yes":
 								for key, data in updated_name.items():
@@ -100,7 +117,7 @@ while department_portal:
 							student_user_name = input("Enter your username: ")
 							user_input = input("Enter the new age: ")
 							updated_age = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Age')
-							response = university_record_system_functions.displayUpdatedIcon()
+							response = university_record_system_functions.display_updated_icon()
 							response = response.lower()
 							if response == "yes":
 								for key, data in updated_age.items():
@@ -109,11 +126,23 @@ while department_portal:
 						case 3:
 							student_user_name = input("Enter your username: ")
 							user_input = input("Enter the new city: ")
-							print(university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address'))
+							updated_city = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address')
+							response = university_record_system_functions.display_updated_icon()
+							response = response.lower()
+							if response == "yes":
+								for key, data in updated_city.items():
+									print(f"{key}: {data}")
+
 						case 4:
 							student_user_name = input("Enter your username: ")
 							user_input = input("Enter the new zip code: ")
-							print(university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address'))
+							updated_zip_code = university_record_system_functions.modify_student_profile(department, student_user_name, user_input, 'Address')
+							response = university_record_system_functions.display_updated_icon()
+							response = response.lower()
+							if response == "yes":
+								for key, data in updated_zip_code.items():
+									print(f"{key}: {data}")
+
 							
 					
 				case 4:
@@ -123,21 +152,32 @@ while department_portal:
 						case 1:
 							student_user_name = input("Enter your username: ")
 							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
+							for course in student_courses:
+								print(course)
 						case 2:
 							student_user_name = input("Enter your username: ")
 							course = input("Enter course name: ")
+							course = course.capitalize()
 							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
-							is_valid = university_record_system_functions.add_new_course(department_courses, student_course, course)
-							if is_valid == "valid":
+							validity = university_record_system_functions.check_validity_to_add_new_course(department_courses, student_courses, course)
+							if validity == "valid":
 								courses.add(course)
-								university_record_system_functions.displaySaveIcon()
+								university_record_system_functions.display_save_icon()
+							else:
+								print(validity)
 						case 3:
 							student_user_name = input("Enter your username: ")
 							course = input("Enter course name you dont want to offer again: ")
+							course = course.capitalize()
 							student_courses = university_record_system_functions.get_courses_student_offer(department, student_user_name)
-							print(university_record_system_functions.remove_course_and_update(department, username, student_courses, course))
-
-
+							updated_student_courses = university_record_system_functions.remove_course_and_update(department, student_user_name, student_courses, course)
+							response = university_record_system_functions.display_updated_icon()
+							response = response.lower
+							if response == 'yes':
+								for course in student_courses:
+									print(course)
+									
+								
 							
 
 		case 2:
@@ -157,6 +197,8 @@ while department_portal:
 					for student, details in department.items():
 						print(f"{student:<12}{details}")
 					
+		case 0:
+			department_portal = False
 			
 
 							
